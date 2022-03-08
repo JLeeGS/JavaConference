@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Timeslot implements Comparable<Timeslot> {
     private Time time;
+    private Session session;
     private ArrayList<Session> sessionArrs;
 
 
@@ -27,6 +28,10 @@ public class Timeslot implements Comparable<Timeslot> {
         this.time=time;
         this.sessionArrs=sessionArrs;
     }
+//    public Timeslot(Time time, Session session){
+//        this.time=time;
+//        this.session=session;
+//    }
 
     @Override
     public int compareTo(Timeslot timeslot) {

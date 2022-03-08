@@ -58,31 +58,37 @@ class JavaConferenceApplicationTests {
 		ArrayList<Session> file=useFile.readSchedule("src/main/resources/JavaConference2020.txt");
 		ArrayList<Timeslot> timeslots=new ArrayList<>();
 			Session lunchSess=new Session("Lunch",60); Session netSess=new Session("Networking",60);
-		timeslots.add(new Timeslot(
-						new Time(12, 0),
-							new ArrayList<Session>(
-									Arrays.asList(lunchSess, lunchSess))));
-		timeslots.add(new Timeslot(
-				new Time(17, 0),
-				new ArrayList<Session>(
-						Arrays.asList(netSess, netSess))));
-
-		int[] hours= {9,10,11,12,13,14,15,16,17};
+//		timeslots.add(new Timeslot(
+//						new Time(12, 0),
+//							new ArrayList<Session>(
+//									Arrays.asList(lunchSess, lunchSess))));
+//		timeslots.add(new Timeslot(
+//				new Time(17, 0),
+//				new ArrayList<Session>(
+//						Arrays.asList(netSess, netSess))));
+		ArrayList<Integer>arr=new ArrayList<>(Arrays.asList(45, 60, 60, 45, 45, 30, 60, 30, 60, 30, 30, 30, 45, 60, 45, 5, 30, 45, 60));
+		ArrayList<Integer> timelength=file.stream().map(Session::getLength).flatMap(Stream::of).collect(Collectors.toCollection(ArrayList::new));
+		int[] hours= {9,10,11,12,13,14,15,16,17}; int sessionLength=0;
 		for (int i=0; i< file.size(); i++) {
-			Set<Time> timeSet=timeslots.stream().map(Timeslot::getTime).collect(Collectors.toSet());
-				ArrayList<Session> sessionSet=timeslots.stream().map(Timeslot::getSessionArrs).flatMap(x->x.stream()).collect(Collectors.toCollection(ArrayList::new));
-				Time sessPrevLength=new Time(9,0);
-					if(timeslots.size()>2){
-						sessPrevLength= timeslots.get(i-1).getTime();
-					}
-					if((!createSchedule.containsTime(timeslots,sessPrevLength))|createSchedule.hasAllSession(file,sessionSet)) {
-								//need latest session length of the track
-								timeslots.add(new Timeslot(sessPrevLength,
-												new ArrayList<Session>(
-													Arrays.asList(file.get(i)))));
-							}
-					//need to add constraints
+			//Collections.sort(timeslots);
+			Set<Time> timeSet = timeslots.stream().map(Timeslot::getTime).collect(Collectors.toSet());
+			ArrayList<Session> sessionArrs = timeslots.stream().map(Timeslot::getSessionArrs).flatMap(x -> x.stream()).collect(Collectors.toCollection(ArrayList::new));
+			Time timePrev = new Time(9,0);int filePrev=0;
+			if (timeslots.size() > 1) {
+				timePrev = timeslots.get(i-1).getTime();
+				filePrev=file.get(i).getLength();
 			}
+			sessionLength +=timelength.get(i);
+			//get search( previous time+ session length%60=0) for @12 and @5
+				timeslots.add(new Timeslot(new Time(
+						(hours[(sessionLength/60)%9]), sessionLength%60),
+						new ArrayList<Session>(
+								Arrays.asList(file.get(i)))));
+				//}
+
+				//need to add constraints
+			System.out.print(sessionLength%60+" ");
+		}
 		Collections.sort(timeslots);
 		timeslots.stream().forEach(System.out::println);
 	}
