@@ -27,6 +27,10 @@ public class Session implements Comparable<Session> {
         this.length=length;
     }
 
+    public String lengthString(){
+        return String.format("%dmin", this.length);
+    }
+
     @Override
     public int compareTo(Session sessionLength) {
         int compareTime=((Session) sessionLength).getLength();
