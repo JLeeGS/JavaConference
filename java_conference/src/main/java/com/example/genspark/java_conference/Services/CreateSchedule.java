@@ -21,11 +21,6 @@ public class CreateSchedule {
         return set1.stream().anyMatch(x->set2.contains(x));
     }
 
-    public int getSessionNumberTotal(TreeMap<Time,ArrayList<Session>> timeslots){
-        return (int) timeslots.values().stream().flatMap(x->x.stream()).filter(x->!x.getTitle().equals(" ")&
-                !x.getTitle().equals("Lunch")&!x.getTitle().equals("Networking")).count();
-    }
-
     public ArrayList<Session> getSessionByLength(ArrayList<Session> sessArrs, int timeLength){
         return sessArrs.stream().filter(s->s.getLength()==timeLength).collect(Collectors.toCollection(ArrayList::new));
     }
@@ -73,6 +68,5 @@ public class CreateSchedule {
 //        //}
 //        return timeslots;
 //    }
-
 
 }

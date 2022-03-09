@@ -58,38 +58,23 @@ class JavaConferenceApplicationTests {
 		ArrayList<Session> file=useFile.readSchedule("src/main/resources/JavaConference2020.txt");
 		ArrayList<Timeslot> timeslots=new ArrayList<>();
 			Session lunchSess=new Session("Lunch",60); Session netSess=new Session("Networking",60);
-//		timeslots.add(new Timeslot(
-//						new Time(12, 0),
-//							new ArrayList<Session>(
-//									Arrays.asList(lunchSess, lunchSess))));
-//		timeslots.add(new Timeslot(
-//				new Time(17, 0),
-//				new ArrayList<Session>(
-//						Arrays.asList(netSess, netSess))));
-		ArrayList<Integer>arr=new ArrayList<>(Arrays.asList(45, 60, 60, 45, 45, 30, 60, 30, 60, 30, 30, 30, 45, 60, 45, 5, 30, 45, 60));
+		//ArrayList<Integer>arr=new ArrayList<>(Arrays.asList(45, 60, 60, 45, 45, 30, 60, 30, 60, 30, 30, 30, 45, 60, 45, 5, 30, 45, 60));
 		ArrayList<Integer> timelength=file.stream().map(Session::getLength).flatMap(Stream::of).collect(Collectors.toCollection(ArrayList::new));
 		int[] hours= {9,10,11,12,13,14,15,16,17}; int sessionLength=0;
 		for (int i=0; i< file.size(); i++) {
 			//Collections.sort(timeslots);
 			Set<Time> timeSet = timeslots.stream().map(Timeslot::getTime).collect(Collectors.toSet());
-			ArrayList<Session> sessionArrs = timeslots.stream().map(Timeslot::getSessionArrs).flatMap(x -> x.stream()).collect(Collectors.toCollection(ArrayList::new));
-			Time timePrev = new Time(9,0);int filePrev=0;
-			if (timeslots.size() > 1) {
-				timePrev = timeslots.get(i-1).getTime();
-				filePrev=file.get(i).getLength();
-			}
-			sessionLength +=timelength.get(i);
+			ArrayList<Session> sessionArrs = timeslots.stream().map(Timeslot::getSession).collect(Collectors.toCollection(ArrayList::new));
 			//get search( previous time+ session length%60=0) for @12 and @5
-				timeslots.add(new Timeslot(new Time(
-						(hours[(sessionLength/60)%9]), sessionLength%60),
-						new ArrayList<Session>(
-								Arrays.asList(file.get(i)))));
+			Time time=new Time(hours[(sessionLength/60)%9],sessionLength%60);
+				Session s1=file.get(i);
+						timeslots.add(new Timeslot(time,s1));
+							sessionLength +=timelength.get(i);
 				//}
-
 				//need to add constraints
-			System.out.print(sessionLength%60+" ");
 		}
-		Collections.sort(timeslots);
+		//Collections.sort(timeslots,Comparator.comparing(Timeslot::getTime));
+		//Cannot sort because the time overlaps and starts again @9:30AM
 		timeslots.stream().forEach(System.out::println);
 	}
 
@@ -99,9 +84,9 @@ class JavaConferenceApplicationTests {
 		ArrayList<Timeslot> timeslots=new ArrayList<>();
 		Session lunchSess=new Session("Lunch",60); Session netSess=new Session("Networking",60);
 		timeslots.add(new Timeslot(
-				new Time(12, 0),
-				new ArrayList<Session>(
-						Arrays.asList(lunchSess, lunchSess))));
+				new Time(12, 0),lunchSess));
+//					new ArrayList<Session>(
+//						Arrays.asList(lunchSess, lunchSess))));
 		Time time=new Time(12,0);
 		System.out.println(createSchedule.containsTime(timeslots,time));
 	}
@@ -145,6 +130,7 @@ class JavaConferenceApplicationTests {
 		ArrayList<ArrayList<Session>> sessArrs= timeslots.values().stream().collect(Collectors.toCollection(ArrayList::new)).get(0);
 		System.out.println(sessArrs.stream().anyMatch(x->x.contains(sess)));
 	}
+
 	@Test
 	void getTotalSessionTime(){
 		UseFile useFile=new UseFile();
