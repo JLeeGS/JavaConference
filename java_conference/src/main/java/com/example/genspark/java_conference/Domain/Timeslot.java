@@ -29,10 +29,7 @@ public class Timeslot {
     public Timeslot(){
         super();
     }
-//    public Timeslot(Time time, ArrayList<Session> sessionArrs){
-//        this.time=time;
-//        this.sessionArrs=sessionArrs;
-//    }
+
     public Timeslot(Time time, Session session){
         this.time=time;
         this.session=session;

@@ -1,6 +1,7 @@
 Java and Containers -Make it Awesome !      45min
 Java: Did you Know That?        60min
-Fun path to Java SE 11 Developer Certifications     60min
+Fun path to Java SE 11 Developer
+Certifications     60min
 Memory Efficient Java       45min
 Discover Modern Java        45min
 Ten Cool Things you might not know about the OpenJDK Java Virtual Machine       30min

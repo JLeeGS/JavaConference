@@ -1,5 +1,6 @@
 package com.example.genspark.java_conference;
 
+import com.example.genspark.java_conference.Domain.Display;
 import com.example.genspark.java_conference.Domain.Session;
 import com.example.genspark.java_conference.Domain.Time;
 import com.example.genspark.java_conference.Domain.Timeslot;
@@ -21,7 +22,7 @@ class JavaConferenceApplicationTests {
 
 	@BeforeEach
 	void setUp(){
-		System.out.println("Starting Test");
+		System.out.println("Starting Tests");
 	}
 
 	@Test
@@ -53,6 +54,54 @@ class JavaConferenceApplicationTests {
 	}
 
 	@Test
+	void getFile2() {
+			ArrayList<Session> arrs = new ArrayList<>();
+			try {
+				File file = new File("src/main/resources/JavaConference2020.txt");
+				Scanner scan = new Scanner(file);
+				int i = 0;
+				while (scan.hasNext()) {
+					String next = scan.nextLine(), stime = "";
+					int index = 0, length = next.length(), time = 0;
+					Matcher m = Pattern.compile("[0-9]+[0-9]+min").matcher(next);
+					if (m.find()) {
+						stime = m.group(0);
+						time = Integer.parseInt(stime.substring(0, 2));
+						index=next.indexOf(stime);
+						arrs.add(new Session(next.substring(0,index), time));
+					}
+					else if (next.contains("lightning")) {
+						index=next.indexOf("lightning");
+						time=5;
+						arrs.add(new Session(next.substring(0,index), time));
+					}
+					else if (time == 0) {
+						String endArr = "", s = scan.next(), min = "";
+						endArr = next + " " + s;
+						if (scan.hasNext("[0-9][0-9]+min")) {
+							min = scan.next("[0-9][0-9]+min");
+							scan.nextLine();
+							time = Integer.parseInt(min.substring(0, 2));
+						}
+						arrs.remove(endArr);
+						arrs.add(new Session(endArr, time));
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		arrs.stream().forEach(System.out::println);
+	}
+
+	@Test
+	void testReadFile(){
+		UseFile useFile=new UseFile();
+		ArrayList<Session> sessions= useFile.readSchedule("src/main/resources/JavaConference2020.txt");
+		sessions.stream().forEach(System.out::println);
+		System.out.println(sessions.size());
+	}
+
+	@Test
 	void generateTimeslots(){
 		UseFile useFile=new UseFile(); CreateSchedule createSchedule=new CreateSchedule();
 		ArrayList<Session> file=useFile.readSchedule("src/main/resources/JavaConference2020.txt");
@@ -75,7 +124,7 @@ class JavaConferenceApplicationTests {
 		}
 		//Collections.sort(timeslots,Comparator.comparing(Timeslot::getTime));
 		//Cannot sort because the time overlaps and starts again @9:30AM
-		timeslots.stream().forEach(System.out::println);
+		//timeslots.stream().forEach(System.out::println);
 	}
 
 	@Test
@@ -148,6 +197,19 @@ class JavaConferenceApplicationTests {
 		ArrayList<Session>file=useFile.readSchedule("src/main/resources/JavaConference2020.txt");
 		ArrayList<Session> thirties=createSchedule.getSessionByLength(file,30);
 			System.out.println(thirties);
+	}
+
+	@Test
+	void getDisplay(){
+		Display display=new Display();
+		Timeslot ts1_track1= new Timeslot(new Time(11,0), new Session("Test Session 1 T1", 30));
+		Timeslot ts2_track1= new Timeslot(new Time(15,0), new Session("Test Session 2 T1", 35));
+			Timeslot ts1_track2= new Timeslot(new Time(11,0), new Session("Test Session 1 T2", 40));
+			Timeslot ts2_track2= new Timeslot(new Time(15,0), new Session("Test Session 2 T2", 55));
+
+		display.addTrack(new ArrayList<Timeslot>(Arrays.asList(ts1_track1,ts2_track1)));
+		display.addTrack(new ArrayList<Timeslot>(Arrays.asList(ts1_track2,ts2_track2)));
+		display.display();
 	}
 
 	@AfterEach

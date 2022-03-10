@@ -37,36 +37,4 @@ public class CreateSchedule {
         return timeSet1.stream().anyMatch(x->x.equals(timeInMins));
     }
 
-//    public TreeMap<Time,ArrayList<Track>> createSchedule(TreeMap<Time,ArrayList<Track>> timeslots, ArrayList<Session> file) {
-//        //start 9, end 17
-//        int hour = 9, minutes = 0, prev = 0;
-//            ArrayList<Track> track1 = timeslots.values().stream().collect(Collectors.toCollection(ArrayList::new)).get(0);
-//                ArrayList<Track> track2 = timeslots.values().stream().collect(Collectors.toCollection(ArrayList::new)).get(1);
-//                    ArrayList<Track> allTracks= track1; allTracks.addAll(track2);
-//                    Session session=null;
-//        //while ((compareArrs(allTracks.get(0).getSession(),file).isEmpty())){
-//            for (Session sess : file) {
-//                if (hour > 24) {
-//                    hour = hour - 24;
-//                }
-//                int length = sess.getLength();
-//                if (((getTotalTrackTime(track1.get(0)) + sess.getLength() <= 60) &
-//                        (!hasSession(timeslots, sess)))) {
-//                    timeslots.put(new Time(hour, 0),
-//                            new ArrayList<>(Arrays.asList(
-//                                    new Track(hour,
-//                                            new ArrayList<Session>(Arrays.asList(sess))))));
-//                } else if (((getTotalTrackTime(track2.get(1)) + sess.getLength() <= 60) &
-//                        (!hasSession(timeslots, sess)))) {
-//                    timeslots.put(new Time(hour, 0),
-//                            new ArrayList<>(Arrays.asList(
-//                                    new Track(hour,
-//                                            new ArrayList<Session>(Arrays.asList(sess))))));
-//                }
-//                hour++;
-//            }
-//        //}
-//        return timeslots;
-//    }
-
 }
