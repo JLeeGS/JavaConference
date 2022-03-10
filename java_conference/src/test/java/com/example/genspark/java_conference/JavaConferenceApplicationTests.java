@@ -3,6 +3,7 @@ package com.example.genspark.java_conference;
 import com.example.genspark.java_conference.Domain.Session;
 import com.example.genspark.java_conference.Domain.Time;
 import com.example.genspark.java_conference.Domain.Timeslot;
+import com.example.genspark.java_conference.Domain.TrackBuilder;
 import com.example.genspark.java_conference.Services.CreateSchedule;
 import com.example.genspark.java_conference.Services.UseFile;
 import org.junit.jupiter.api.AfterEach;
@@ -50,6 +51,9 @@ class JavaConferenceApplicationTests {
 			e.printStackTrace();
 		}
 		Collections.sort(arrs);
+		TrackBuilder tb = new TrackBuilder(arrs);
+		tb.buildTrack();
+		tb.buildTrack();
 	}
 
 	@Test

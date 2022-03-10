@@ -25,6 +25,7 @@ public class Display {
                 System.out.println(String.format("%s     %s     %s", track.get(j).getTime().getTimeTwelveHourFormat(),
                         track.get(j).getSession().getTitle(), track.get(j).getSession().lengthString()));
             }
+            System.out.println();
         }
     }
 }
